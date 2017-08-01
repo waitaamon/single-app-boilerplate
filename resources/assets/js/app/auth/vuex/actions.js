@@ -3,6 +3,7 @@ import { isEmpty } from 'lodash'
 import  localforage from "localforage";
 
 
+
 export const register = ({ dispatch }, { payload, context }) => {
 
     return axios.post('/api/register', payload).then( (response) => {
@@ -72,6 +73,15 @@ export const fetchUser = ( { commit }) => {
 
         commit('setAuthenticated', true)
         commit('setUserData', response.data.data)
+    })
+}
+
+export const logout = ( { dispatch }) => {
+
+    return axios.post('/api/logout').then((response) => {
+
+        dispatch('clearAuth')
+
     })
 }
 

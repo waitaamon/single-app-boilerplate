@@ -15299,6 +15299,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setToken", function() { return setToken; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkTokenExists", function() { return checkTokenExists; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchUser", function() { return fetchUser; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "logout", function() { return logout; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearAuth", function() { return clearAuth; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers__ = __webpack_require__(80);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash__ = __webpack_require__(40);
@@ -15390,9 +15391,19 @@ var fetchUser = function fetchUser(_ref7) {
     });
 };
 
-var clearAuth = function clearAuth(_ref8, token) {
-    var commit = _ref8.commit,
-        dispatch = _ref8.dispatch;
+var logout = function logout(_ref8) {
+    var dispatch = _ref8.dispatch;
+
+
+    return axios.post('/api/logout').then(function (response) {
+
+        dispatch('clearAuth');
+    });
+};
+
+var clearAuth = function clearAuth(_ref9, token) {
+    var commit = _ref9.commit,
+        dispatch = _ref9.dispatch;
 
 
     commit('setAuthenticated', false);
@@ -46402,6 +46413,8 @@ module.exports = Component.exports
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(3);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 //
 //
 //
@@ -46467,6 +46480,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])({
         user: 'auth/user'
+    }),
+
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({
+        logout: 'auth/logout'
+    }), {
+        signOut: function signOut() {
+            var _this = this;
+
+            this.logout().then(function () {
+
+                _this.$router.replace({ name: 'home' });
+            });
+        }
     })
 });
 
@@ -46529,7 +46555,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("\n                       " + _vm._s(_vm.user.data.username) + "  "), _c('span', {
     staticClass: "caret"
-  })]), _vm._v(" "), _vm._m(1)])]) : _vm._e()])])])
+  })]), _vm._v(" "), _c('ul', {
+    staticClass: "dropdown-menu",
+    attrs: {
+      "role": "menu"
+    }
+  }, [_c('li', [_c('a', {
+    attrs: {
+      "href": "#"
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.signOut($event)
+      }
+    }
+  }, [_vm._v("\n                                Logout\n                            ")])])])])]) : _vm._e()])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('button', {
     staticClass: "navbar-toggle collapsed",
@@ -46547,17 +46588,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v(" "), _c('span', {
     staticClass: "icon-bar"
   })])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('ul', {
-    staticClass: "dropdown-menu",
-    attrs: {
-      "role": "menu"
-    }
-  }, [_c('li', [_c('a', {
-    attrs: {
-      "href": "#"
-    }
-  }, [_vm._v("\n                                Logout\n                            ")])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
